@@ -1,5 +1,4 @@
-# TWT
-TWT prompt
+# TWT Prompt
 
 Download index.html, index2.html, and index3.html.
 
