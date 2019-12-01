@@ -1,0 +1,149 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TWT</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" /> 
+    <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet'>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <style>
+        th, td, p, input {
+            font:14px Verdana;
+        }
+        table, th, td {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #61C2A2">
+        <a class="navbar-brand" href="#">Vandelay Industries</a>
+
+        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">   
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Static Table</a>
+            </li>    
+            <li class="nav-item">
+              <a class="nav-link" href="index2.html">Dynamic DataTable</a>
+            </li>          
+            <li class="nav-item">
+              <a class="nav-link" href="index3.html">Graph</a>
+            </li>
+          </ul>
+        </div>  
+    </nav>
+
+
+<!--     <div class="container">
+        <div id="result"></div>
+    </div> -->
+
+        <p id="showData"></p>
+
+    <script>
+
+    // $(document).ready(function(){
+    //     $.ajax({
+    //         url: "",
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         success: function(res) {
+    //            $('#result').html(res)
+    //         }
+    //     });
+    // })
+
+    var link = "https://my.api.mockaroo.com/vandelay_industries.json?key=1e872ee0"
+    // $.getJSON(link)
+    //     .done(function(data){
+    //     console.log(data.name)
+    // })
+
+    function getData() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var obj = JSON.parse(this.response);
+
+          // for (var item in obj) {
+          //   document.write("id: " + JSON.stringify(obj[item].id));
+          //   document.write("import country: " + JSON.stringify(obj[item].import_country));
+          // }
+
+            // Create Table
+            var table = document.createElement("table");
+            var col = [];
+            var tr = table.insertRow(-1);                   
+
+            var count = 0;
+            for (var item in obj) {
+                var myData = [
+                    {
+                        "ID": JSON.stringify(obj[item].id).replace(/['"]+/g, ''),
+                        "Import Country": JSON.stringify(obj[item].import_country).replace(/['"]+/g, ''),
+                        "Model": JSON.stringify(obj[item].model).replace(/['"]+/g, ''),
+                        "Make": JSON.stringify(obj[item].make).replace(/['"]+/g, ''),
+                        "Sold By": JSON.stringify(obj[item].sold_by).replace(/['"]+/g, ''),
+                        "Sale Price": JSON.stringify(obj[item].sale_price).replace(/['"]+/g, '')
+                    }
+                ]
+
+                // Table Header
+                for (var i = 0; i < myData.length; i++) {
+                    for (var key in myData[i]) {
+                        if (col.indexOf(key) === -1) {
+                            col.push(key);
+                        }
+                    }
+                }
+
+                if (count == 0) {
+                    for (var i = 0; i < col.length; i++) {
+                        var th = document.createElement("th");
+                        th.innerHTML = col[i];
+                        tr.appendChild(th);
+                    }
+                }
+
+                // Add JSON data to table
+                for (var i = 0; i < myData.length; i++) {
+                    var tr = table.insertRow(-1);
+                    for (var j = 0; j < col.length; j++) {
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = myData[i][col[j]];
+                    }
+                }
+                count++;
+            }
+
+
+            // Add table to a container
+            var divContainer = document.getElementById("showData");
+            divContainer.innerHTML = "";
+            divContainer.appendChild(table);
+        }
+      };
+      xhttp.open("GET", link, true);
+      xhttp.send();
+    }
+
+    getData();
+
+</script>
+
+</body>
+        
+</html>
